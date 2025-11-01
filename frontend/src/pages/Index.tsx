@@ -45,7 +45,7 @@ const Index = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-xl mb-6">
             <Package className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-5xl font-bold mb-4">Inventory Pro</h1>
+          <h1 className="text-5xl font-bold mb-4">LogistiQ</h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Your complete inventory management solution. Track products, manage suppliers, and optimize your stock levels.
           </p>

@@ -50,7 +50,7 @@ export default function Auth() {
           <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-2">
             <Package className="w-6 h-6 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl font-bold">Inventory Pro</CardTitle>
+          <CardTitle className="text-2xl font-bold">LogistiQ</CardTitle>
           <CardDescription>
             Manage your inventory with ease
           </CardDescription>
