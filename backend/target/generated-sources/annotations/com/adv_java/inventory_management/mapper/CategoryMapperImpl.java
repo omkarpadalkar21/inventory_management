@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-01T22:38:11+0530",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251023-0518, environment: Java 21.0.8 (Eclipse Adoptium)"
+    date = "2025-11-01T22:48:27+0530",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
 )
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
@@ -23,10 +23,10 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         CategoryDto.CategoryDtoBuilder categoryDto = CategoryDto.builder();
 
-        categoryDto.createdAt( category.getCreatedAt() );
-        categoryDto.description( category.getDescription() );
         categoryDto.id( category.getId() );
         categoryDto.name( category.getName() );
+        categoryDto.description( category.getDescription() );
+        categoryDto.createdAt( category.getCreatedAt() );
         categoryDto.updatedAt( category.getUpdatedAt() );
 
         return categoryDto.build();
@@ -40,8 +40,8 @@ public class CategoryMapperImpl implements CategoryMapper {
 
         Categories.CategoriesBuilder categories = Categories.builder();
 
-        categories.description( dto.getDescription() );
         categories.name( dto.getName() );
+        categories.description( dto.getDescription() );
 
         return categories.build();
     }
@@ -52,11 +52,11 @@ public class CategoryMapperImpl implements CategoryMapper {
             return;
         }
 
-        if ( dto.getDescription() != null ) {
-            category.setDescription( dto.getDescription() );
-        }
         if ( dto.getName() != null ) {
             category.setName( dto.getName() );
+        }
+        if ( dto.getDescription() != null ) {
+            category.setDescription( dto.getDescription() );
         }
     }
 }

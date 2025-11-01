@@ -18,4 +18,10 @@ public interface ProductRepository extends JpaRepository<Products, UUID> {
     List<Products> searchProducts(@Param("keyword") String keyword);
 
     Page<Products> findAll(Pageable pageable);
+    
+    @Query("SELECT COUNT(p) > 0 FROM Products p WHERE p.supplier.id = :supplierId")
+    boolean existsBySupplierId(@Param("supplierId") UUID supplierId);
+    
+    @Query("SELECT COUNT(p) FROM Products p WHERE p.supplier.id = :supplierId")
+    long countBySupplierId(@Param("supplierId") UUID supplierId);
 }

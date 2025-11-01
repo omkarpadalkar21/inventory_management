@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-01T22:38:11+0530",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251023-0518, environment: Java 21.0.8 (Eclipse Adoptium)"
+    date = "2025-11-01T22:48:27+0530",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
 )
 @Component
 public class SupplierMapperImpl implements SupplierMapper {
@@ -23,13 +23,13 @@ public class SupplierMapperImpl implements SupplierMapper {
 
         SupplierDto.SupplierDtoBuilder supplierDto = SupplierDto.builder();
 
-        supplierDto.address( supplier.getAddress() );
-        supplierDto.contactPerson( supplier.getContactPerson() );
-        supplierDto.createdAt( supplier.getCreatedAt() );
-        supplierDto.email( supplier.getEmail() );
         supplierDto.id( supplier.getId() );
         supplierDto.name( supplier.getName() );
+        supplierDto.contactPerson( supplier.getContactPerson() );
+        supplierDto.email( supplier.getEmail() );
         supplierDto.phone( supplier.getPhone() );
+        supplierDto.address( supplier.getAddress() );
+        supplierDto.createdAt( supplier.getCreatedAt() );
         supplierDto.updatedAt( supplier.getUpdatedAt() );
 
         return supplierDto.build();
@@ -43,11 +43,11 @@ public class SupplierMapperImpl implements SupplierMapper {
 
         Supplier.SupplierBuilder supplier = Supplier.builder();
 
-        supplier.address( dto.getAddress() );
+        supplier.name( dto.getName() );
         supplier.contactPerson( dto.getContactPerson() );
         supplier.email( dto.getEmail() );
-        supplier.name( dto.getName() );
         supplier.phone( dto.getPhone() );
+        supplier.address( dto.getAddress() );
 
         return supplier.build();
     }
@@ -58,8 +58,8 @@ public class SupplierMapperImpl implements SupplierMapper {
             return;
         }
 
-        if ( dto.getAddress() != null ) {
-            supplier.setAddress( dto.getAddress() );
+        if ( dto.getName() != null ) {
+            supplier.setName( dto.getName() );
         }
         if ( dto.getContactPerson() != null ) {
             supplier.setContactPerson( dto.getContactPerson() );
@@ -67,11 +67,11 @@ public class SupplierMapperImpl implements SupplierMapper {
         if ( dto.getEmail() != null ) {
             supplier.setEmail( dto.getEmail() );
         }
-        if ( dto.getName() != null ) {
-            supplier.setName( dto.getName() );
-        }
         if ( dto.getPhone() != null ) {
             supplier.setPhone( dto.getPhone() );
+        }
+        if ( dto.getAddress() != null ) {
+            supplier.setAddress( dto.getAddress() );
         }
     }
 }
