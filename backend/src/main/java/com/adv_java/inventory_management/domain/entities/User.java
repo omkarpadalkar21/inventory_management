@@ -30,8 +30,8 @@ public class User {
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Size(min = 8, max = 50, message = "Password must be between {min} and {max} characters")
-    @Column(name = "password", length = 50, nullable = false)
+    @Size(min = 8, max = 255, message = "Password must be between {min} and {max} characters")
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Column(name = "role", nullable = false)

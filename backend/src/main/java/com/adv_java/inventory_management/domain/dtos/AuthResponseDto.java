@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class AuthResponseDto {
+    private String token;           // JWT authentication token
+    private UserDto user;           // User information
+    private String message;         // Optional success message
 }

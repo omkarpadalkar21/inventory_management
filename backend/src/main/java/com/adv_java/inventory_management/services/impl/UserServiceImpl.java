@@ -6,6 +6,7 @@ import com.adv_java.inventory_management.exception.UserAlreadyExistsException;
 import com.adv_java.inventory_management.repository.UserRepository;
 import com.adv_java.inventory_management.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,20 @@ public class UserServiceImpl implements UserService {
                 .role(registerRequestDto.getRole())
                 .build();
 
+        return userRepository.save(newUser);
+    }
 
-        userRepository.save(newUser);
+    @Override
+    public User loginUser(String email, String password) {
+        // Find user by email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        // Verify password
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        return user;
     }
 }

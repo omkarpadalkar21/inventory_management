@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "";
 
 class ApiClient {
   private baseUrl: string;
@@ -6,15 +7,15 @@ class ApiClient {
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
-    this.token = localStorage.getItem('auth_token');
+    this.token = localStorage.getItem("auth_token");
   }
 
   setToken(token: string | null) {
     this.token = token;
     if (token) {
-      localStorage.setItem('auth_token', token);
+      localStorage.setItem("auth_token", token);
     } else {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem("auth_token");
     }
   }
 
@@ -23,12 +24,12 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const headers: HeadersInit = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     };
 
     if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
@@ -37,7 +38,9 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+      const error = await response
+        .json()
+        .catch(() => ({ message: "An error occurred" }));
       throw new Error(error.message || `HTTP ${response.status}`);
     }
 
@@ -45,29 +48,40 @@ class ApiClient {
   }
 
   // Auth endpoints
-  async register(data: { username: string; email: string; password: string }) {
-    return this.request('/api/auth/register', {
-      method: 'POST',
+  async register(data: {
+    username: string;
+    email: string;
+    password: string;
+    role: string;
+  }) {
+    return this.request("/api/auth/register", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async login(data: { email: string; password: string }) {
-    const response = await this.request<{ token: string; user: any }>('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const response = await this.request<{ token: string; user: any }>(
+      "/api/auth/login",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      }
+    );
     this.setToken(response.token);
     return response;
   }
 
   async logout() {
-    await this.request('/api/auth/logout', { method: 'POST' });
+    await this.request("/api/auth/logout", { method: "POST" });
     this.setToken(null);
   }
 
   // Products
-  async getProducts(page = 1, limit = 10): Promise<{ data: any[]; total?: number }> {
+  async getProducts(
+    page = 1,
+    limit = 10
+  ): Promise<{ data: any[]; total?: number }> {
     return this.request(`/api/products?page=${page}&limit=${limit}`);
   }
 
@@ -76,34 +90,36 @@ class ApiClient {
   }
 
   async getLowStockProducts(): Promise<{ data: any[] }> {
-    return this.request('/api/products/low-stock');
+    return this.request("/api/products/low-stock");
   }
 
   async searchProducts(keyword: string): Promise<{ data: any[] }> {
-    return this.request(`/api/products/search?keyword=${encodeURIComponent(keyword)}`);
+    return this.request(
+      `/api/products/search?keyword=${encodeURIComponent(keyword)}`
+    );
   }
 
   async createProduct(data: any) {
-    return this.request('/api/products', {
-      method: 'POST',
+    return this.request("/api/products", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async updateProduct(id: number, data: any) {
     return this.request(`/api/products/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async deleteProduct(id: number) {
-    return this.request(`/api/products/${id}`, { method: 'DELETE' });
+    return this.request(`/api/products/${id}`, { method: "DELETE" });
   }
 
   // Categories
   async getCategories(): Promise<{ data: any[] }> {
-    return this.request('/api/categories');
+    return this.request("/api/categories");
   }
 
   async getCategory(id: number) {
@@ -111,26 +127,26 @@ class ApiClient {
   }
 
   async createCategory(data: any) {
-    return this.request('/api/categories', {
-      method: 'POST',
+    return this.request("/api/categories", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async updateCategory(id: number, data: any) {
     return this.request(`/api/categories/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async deleteCategory(id: number) {
-    return this.request(`/api/categories/${id}`, { method: 'DELETE' });
+    return this.request(`/api/categories/${id}`, { method: "DELETE" });
   }
 
   // Suppliers
   async getSuppliers(): Promise<{ data: any[] }> {
-    return this.request('/api/suppliers');
+    return this.request("/api/suppliers");
   }
 
   async getSupplier(id: number) {
@@ -138,26 +154,26 @@ class ApiClient {
   }
 
   async createSupplier(data: any) {
-    return this.request('/api/suppliers', {
-      method: 'POST',
+    return this.request("/api/suppliers", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async updateSupplier(id: number, data: any) {
     return this.request(`/api/suppliers/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async deleteSupplier(id: number) {
-    return this.request(`/api/suppliers/${id}`, { method: 'DELETE' });
+    return this.request(`/api/suppliers/${id}`, { method: "DELETE" });
   }
 
   // Stock Transactions
   async getStockTransactions(): Promise<{ data: any[] }> {
-    return this.request('/api/stock-transactions');
+    return this.request("/api/stock-transactions");
   }
 
   async getStockTransaction(id: number) {
@@ -169,29 +185,29 @@ class ApiClient {
   }
 
   async stockIn(data: any) {
-    return this.request('/api/stock-transactions/stock-in', {
-      method: 'POST',
+    return this.request("/api/stock-transactions/stock-in", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async stockOut(data: any) {
-    return this.request('/api/stock-transactions/stock-out', {
-      method: 'POST',
+    return this.request("/api/stock-transactions/stock-out", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async adjustStock(data: any) {
-    return this.request('/api/stock-transactions/adjust', {
-      method: 'POST',
+    return this.request("/api/stock-transactions/adjust", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   // Purchase Orders
   async getPurchaseOrders(): Promise<{ data: any[] }> {
-    return this.request('/api/purchase-orders');
+    return this.request("/api/purchase-orders");
   }
 
   async getPurchaseOrder(id: number) {
@@ -199,33 +215,33 @@ class ApiClient {
   }
 
   async createPurchaseOrder(data: any) {
-    return this.request('/api/purchase-orders', {
-      method: 'POST',
+    return this.request("/api/purchase-orders", {
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   async updatePurchaseOrder(id: number, data: any) {
     return this.request(`/api/purchase-orders/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async updatePurchaseOrderStatus(id: number, status: string) {
     return this.request(`/api/purchase-orders/${id}/status`, {
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify({ status }),
     });
   }
 
   async deletePurchaseOrder(id: number) {
-    return this.request(`/api/purchase-orders/${id}`, { method: 'DELETE' });
+    return this.request(`/api/purchase-orders/${id}`, { method: "DELETE" });
   }
 
   // Users (Admin only)
   async getUsers(): Promise<{ data: any[] }> {
-    return this.request('/api/users');
+    return this.request("/api/users");
   }
 
   async getUser(id: number) {
@@ -234,13 +250,13 @@ class ApiClient {
 
   async updateUser(id: number, data: any) {
     return this.request(`/api/users/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
   async deleteUser(id: number) {
-    return this.request(`/api/users/${id}`, { method: 'DELETE' });
+    return this.request(`/api/users/${id}`, { method: "DELETE" });
   }
 }
 

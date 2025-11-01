@@ -5,4 +5,5 @@ import com.adv_java.inventory_management.domain.entities.User;
 
 public interface UserService {
     public User registerUser(RegisterRequestDto registerRequestDto);
+    public User loginUser(String email, String password);
 }
