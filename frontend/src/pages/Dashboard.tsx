@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, TrendingDown, ShoppingCart, DollarSign } from 'lucide-react';
+import { Package, TrendingDown, ShoppingCart, DollarSign, LogOut } from 'lucide-react';
 import { apiClient } from '@/lib/api';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -11,20 +13,30 @@ export default function Dashboard() {
     pendingOrders: 0,
     totalValue: 0,
   });
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [products, lowStock] = await Promise.all([
-          apiClient.getProducts(1, 1000),
+        const [productsResponse, lowStock, purchaseOrders] = await Promise.all([
+          apiClient.getProducts(0, 1000),
           apiClient.getLowStockProducts(),
+          apiClient.getPurchaseOrders(),
         ]);
-        
+
+        const productList = (productsResponse as any)?.data ?? [];
+        const totalValue = productList.reduce(
+          (sum: number, p: any) => sum + (Number(p.unitPrice) || 0) * (Number(p.quantityInStock) || 0),
+          0
+        );
+        const pendingOrders = (purchaseOrders as any[])?.filter((o: any) => o.status === 'PENDING')?.length ?? 0;
+
         setStats({
-          totalProducts: products.total || products.data?.length || 0,
-          lowStockItems: lowStock.data?.length || 0,
-          pendingOrders: 0, // Would need to fetch from purchase orders
-          totalValue: 0, // Would need to calculate from products
+          totalProducts:
+            (productsResponse as any)?.totalElements ?? productList.length ?? 0,
+          lowStockItems: (lowStock as any[])?.length ?? 0,
+          pendingOrders,
+          totalValue,
         });
       } catch (error) {
         console.error('Failed to fetch stats:', error);
@@ -70,7 +82,17 @@ export default function Dashboard() {
       <Sidebar />
       <main className="flex-1 p-8 bg-background">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                <Package className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <h1 className="text-3xl font-bold">Dashboard</h1>
+            </div>
+            <Button variant="outline" onClick={logout}>
+              <LogOut className="w-4 h-4 mr-2" /> Logout
+            </Button>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {statCards.map((stat) => {

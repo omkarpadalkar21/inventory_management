@@ -78,8 +78,14 @@ class ApiClient {
   }
 
   async logout() {
-    await this.request("/api/auth/logout", { method: "POST" });
-    this.setToken(null);
+    try {
+      await this.request("/api/auth/logout", { method: "POST" });
+    } catch (error) {
+      // Clear token even if logout fails on backend
+      console.warn("Logout API call failed, clearing local session:", error);
+    } finally {
+      this.setToken(null);
+    }
   }
 
   // Products
