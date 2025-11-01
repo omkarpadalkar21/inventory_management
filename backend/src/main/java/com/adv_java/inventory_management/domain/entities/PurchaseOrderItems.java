@@ -17,7 +17,7 @@ public class PurchaseOrderItems {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "purchase_order_id")
