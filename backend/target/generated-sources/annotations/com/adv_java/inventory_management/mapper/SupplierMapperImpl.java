@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-01T19:29:55+0530",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
+    date = "2025-11-01T19:52:35+0530",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251023-0518, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class SupplierMapperImpl implements SupplierMapper {
@@ -23,13 +23,13 @@ public class SupplierMapperImpl implements SupplierMapper {
 
         SupplierDto.SupplierDtoBuilder supplierDto = SupplierDto.builder();
 
-        supplierDto.contactPerson( supplier.getContact_person() );
+        supplierDto.address( supplier.getAddress() );
+        supplierDto.contactPerson( supplier.getContactPerson() );
+        supplierDto.createdAt( supplier.getCreatedAt() );
+        supplierDto.email( supplier.getEmail() );
         supplierDto.id( supplier.getId() );
         supplierDto.name( supplier.getName() );
-        supplierDto.email( supplier.getEmail() );
         supplierDto.phone( supplier.getPhone() );
-        supplierDto.address( supplier.getAddress() );
-        supplierDto.createdAt( supplier.getCreatedAt() );
         supplierDto.updatedAt( supplier.getUpdatedAt() );
 
         return supplierDto.build();
@@ -43,11 +43,11 @@ public class SupplierMapperImpl implements SupplierMapper {
 
         Supplier.SupplierBuilder supplier = Supplier.builder();
 
-        supplier.contact_person( dto.getContactPerson() );
-        supplier.name( dto.getName() );
-        supplier.email( dto.getEmail() );
-        supplier.phone( dto.getPhone() );
         supplier.address( dto.getAddress() );
+        supplier.contactPerson( dto.getContactPerson() );
+        supplier.email( dto.getEmail() );
+        supplier.name( dto.getName() );
+        supplier.phone( dto.getPhone() );
 
         return supplier.build();
     }
@@ -58,20 +58,20 @@ public class SupplierMapperImpl implements SupplierMapper {
             return;
         }
 
-        if ( dto.getContactPerson() != null ) {
-            supplier.setContact_person( dto.getContactPerson() );
+        if ( dto.getAddress() != null ) {
+            supplier.setAddress( dto.getAddress() );
         }
-        if ( dto.getName() != null ) {
-            supplier.setName( dto.getName() );
+        if ( dto.getContactPerson() != null ) {
+            supplier.setContactPerson( dto.getContactPerson() );
         }
         if ( dto.getEmail() != null ) {
             supplier.setEmail( dto.getEmail() );
         }
+        if ( dto.getName() != null ) {
+            supplier.setName( dto.getName() );
+        }
         if ( dto.getPhone() != null ) {
             supplier.setPhone( dto.getPhone() );
-        }
-        if ( dto.getAddress() != null ) {
-            supplier.setAddress( dto.getAddress() );
         }
     }
 }

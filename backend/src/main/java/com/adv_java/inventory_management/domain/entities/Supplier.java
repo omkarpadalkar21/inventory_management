@@ -27,7 +27,7 @@ public class Supplier {
 
     @Size(min = 2, max = 50, message = "Contact person names must be between {min} and {max} characters")
     @Column(name = "contact_person", nullable = false)
-    private String contact_person;
+    private String contactPerson;
 
     @Email
     @Size(max = 100, message = "Email can be at max {max} characters")

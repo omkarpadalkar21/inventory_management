@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 class ApiClient {
   private baseUrl: string;
@@ -44,17 +44,22 @@ class ApiClient {
       throw new Error(error.message || `HTTP ${response.status}`);
     }
 
+    // Handle 204 No Content
+    if (response.status === 204) {
+      return null as T;
+    }
+
     return response.json();
   }
 
-  // Auth endpoints
+  // Auth
   async register(data: {
     username: string;
     email: string;
     password: string;
     role: string;
   }) {
-    return this.request("/api/auth/register", {
+    return this.request<any>("/api/auth/register", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -78,185 +83,201 @@ class ApiClient {
   }
 
   // Products
-  async getProducts(
-    page = 1,
-    limit = 10
-  ): Promise<{ data: any[]; total?: number }> {
-    return this.request(`/api/products?page=${page}&limit=${limit}`);
+  async getProducts(page = 0, size = 10) {
+    return this.request<{
+      data: any[];
+      page: number;
+      size: number;
+      totalElements: number;
+      totalPages: number;
+    }>(`/api/products?page=${page}&size=${size}`);
   }
 
-  async getProduct(id: number) {
-    return this.request(`/api/products/${id}`);
+  async getProduct(id: string) {
+    return this.request<any>(`/api/products/${id}`);
   }
 
-  async getLowStockProducts(): Promise<{ data: any[] }> {
-    return this.request("/api/products/low-stock");
+  async getLowStockProducts() {
+    return this.request<any[]>("/api/products/low-stock");
   }
 
-  async searchProducts(keyword: string): Promise<{ data: any[] }> {
-    return this.request(
+  async searchProducts(keyword: string) {
+    return this.request<any[]>(
       `/api/products/search?keyword=${encodeURIComponent(keyword)}`
     );
   }
 
   async createProduct(data: any) {
-    return this.request("/api/products", {
+    return this.request<any>("/api/products", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async updateProduct(id: number, data: any) {
-    return this.request(`/api/products/${id}`, {
+  async updateProduct(id: string, data: any) {
+    return this.request<any>(`/api/products/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
-  async deleteProduct(id: number) {
-    return this.request(`/api/products/${id}`, { method: "DELETE" });
+  async deleteProduct(id: string) {
+    return this.request<void>(`/api/products/${id}`, { method: "DELETE" });
   }
 
   // Categories
-  async getCategories(): Promise<{ data: any[] }> {
-    return this.request("/api/categories");
+  async getCategories() {
+    return this.request<any[]>("/api/categories");
   }
 
-  async getCategory(id: number) {
-    return this.request(`/api/categories/${id}`);
+  async getCategory(id: string) {
+    return this.request<any>(`/api/categories/${id}`);
   }
 
-  async createCategory(data: any) {
-    return this.request("/api/categories", {
+  async createCategory(data: { name: string; description?: string }) {
+    return this.request<any>("/api/categories", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async updateCategory(id: number, data: any) {
-    return this.request(`/api/categories/${id}`, {
+  async updateCategory(
+    id: string,
+    data: { name?: string; description?: string }
+  ) {
+    return this.request<any>(`/api/categories/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
-  async deleteCategory(id: number) {
-    return this.request(`/api/categories/${id}`, { method: "DELETE" });
+  async deleteCategory(id: string) {
+    return this.request<void>(`/api/categories/${id}`, { method: "DELETE" });
   }
 
   // Suppliers
-  async getSuppliers(): Promise<{ data: any[] }> {
-    return this.request("/api/suppliers");
+  async getSuppliers() {
+    return this.request<any[]>("/api/suppliers");
   }
 
-  async getSupplier(id: number) {
-    return this.request(`/api/suppliers/${id}`);
+  async getSupplier(id: string) {
+    return this.request<any>(`/api/suppliers/${id}`);
   }
 
   async createSupplier(data: any) {
-    return this.request("/api/suppliers", {
+    return this.request<any>("/api/suppliers", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async updateSupplier(id: number, data: any) {
-    return this.request(`/api/suppliers/${id}`, {
+  async updateSupplier(id: string, data: any) {
+    return this.request<any>(`/api/suppliers/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
-  async deleteSupplier(id: number) {
-    return this.request(`/api/suppliers/${id}`, { method: "DELETE" });
+  async deleteSupplier(id: string) {
+    return this.request<void>(`/api/suppliers/${id}`, { method: "DELETE" });
   }
 
   // Stock Transactions
-  async getStockTransactions(): Promise<{ data: any[] }> {
-    return this.request("/api/stock-transactions");
+  async getStockTransactions() {
+    return this.request<any[]>("/api/stock-transactions");
   }
 
-  async getStockTransaction(id: number) {
-    return this.request(`/api/stock-transactions/${id}`);
+  async getStockTransaction(id: string) {
+    return this.request<any>(`/api/stock-transactions/${id}`);
   }
 
-  async getProductTransactionHistory(productId: number) {
-    return this.request(`/api/stock-transactions/product/${productId}`);
+  async getProductTransactionHistory(productId: string) {
+    return this.request<any[]>(`/api/stock-transactions/product/${productId}`);
   }
 
-  async stockIn(data: any) {
-    return this.request("/api/stock-transactions/stock-in", {
+  async stockIn(data: {
+    productId: string;
+    quantity: number;
+    referenceNumber?: string;
+    notes?: string;
+  }) {
+    return this.request<any>("/api/stock-transactions/stock-in", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async stockOut(data: any) {
-    return this.request("/api/stock-transactions/stock-out", {
+  async stockOut(data: {
+    productId: string;
+    quantity: number;
+    referenceNumber?: string;
+    notes?: string;
+  }) {
+    return this.request<any>("/api/stock-transactions/stock-out", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async adjustStock(data: any) {
-    return this.request("/api/stock-transactions/adjust", {
+  async adjustStock(data: {
+    productId: string;
+    quantity: number;
+    referenceNumber?: string;
+    notes: string;
+  }) {
+    return this.request<any>("/api/stock-transactions/adjust", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
   // Purchase Orders
-  async getPurchaseOrders(): Promise<{ data: any[] }> {
-    return this.request("/api/purchase-orders");
+  async getPurchaseOrders() {
+    return this.request<any[]>("/api/purchase-orders");
   }
 
-  async getPurchaseOrder(id: number) {
-    return this.request(`/api/purchase-orders/${id}`);
+  async getPurchaseOrder(id: string) {
+    return this.request<any>(`/api/purchase-orders/${id}`);
   }
 
   async createPurchaseOrder(data: any) {
-    return this.request("/api/purchase-orders", {
+    return this.request<any>("/api/purchase-orders", {
       method: "POST",
       body: JSON.stringify(data),
     });
   }
 
-  async updatePurchaseOrder(id: number, data: any) {
-    return this.request(`/api/purchase-orders/${id}`, {
+  async updatePurchaseOrder(id: string, data: any) {
+    return this.request<any>(`/api/purchase-orders/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
 
-  async updatePurchaseOrderStatus(id: number, status: string) {
-    return this.request(`/api/purchase-orders/${id}/status`, {
+  async updatePurchaseOrderStatus(id: string, status: string) {
+    return this.request<any>(`/api/purchase-orders/${id}/status`, {
       method: "PATCH",
       body: JSON.stringify({ status }),
     });
   }
 
-  async deletePurchaseOrder(id: number) {
-    return this.request(`/api/purchase-orders/${id}`, { method: "DELETE" });
-  }
-
-  // Users (Admin only)
-  async getUsers(): Promise<{ data: any[] }> {
-    return this.request("/api/users");
-  }
-
-  async getUser(id: number) {
-    return this.request(`/api/users/${id}`);
-  }
-
-  async updateUser(id: number, data: any) {
-    return this.request(`/api/users/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
+  async deletePurchaseOrder(id: string) {
+    return this.request<void>(`/api/purchase-orders/${id}`, {
+      method: "DELETE",
     });
   }
 
-  async deleteUser(id: number) {
-    return this.request(`/api/users/${id}`, { method: "DELETE" });
+  // Users
+  async getUsers() {
+    return this.request<any[]>("/api/users");
+  }
+
+  async getUser(id: string) {
+    return this.request<any>(`/api/users/${id}`);
+  }
+
+  async deleteUser(id: string) {
+    return this.request<void>(`/api/users/${id}`, { method: "DELETE" });
   }
 }
 

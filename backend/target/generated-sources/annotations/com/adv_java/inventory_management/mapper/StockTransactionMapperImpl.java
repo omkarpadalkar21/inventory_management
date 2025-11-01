@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-01T19:29:55+0530",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
+    date = "2025-11-01T19:52:35+0530",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251023-0518, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class StockTransactionMapperImpl implements StockTransactionMapper {
@@ -29,11 +29,11 @@ public class StockTransactionMapperImpl implements StockTransactionMapper {
         stockTransactionDto.performedById( transactionPerformedById( transaction ) );
         stockTransactionDto.performedByUsername( transactionPerformedByUsername( transaction ) );
         stockTransactionDto.id( transaction.getId() );
-        stockTransactionDto.transactionType( transaction.getTransactionType() );
+        stockTransactionDto.notes( transaction.getNotes() );
         stockTransactionDto.quantity( transaction.getQuantity() );
         stockTransactionDto.referenceNumber( transaction.getReferenceNumber() );
-        stockTransactionDto.notes( transaction.getNotes() );
         stockTransactionDto.transactionDate( transaction.getTransactionDate() );
+        stockTransactionDto.transactionType( transaction.getTransactionType() );
 
         return stockTransactionDto.build();
     }
