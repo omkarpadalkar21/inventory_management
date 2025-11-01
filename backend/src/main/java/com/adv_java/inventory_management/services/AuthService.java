@@ -4,4 +4,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthService {
     UserDetails validateToken(String token);
+    String generateToken(String username);
 }
