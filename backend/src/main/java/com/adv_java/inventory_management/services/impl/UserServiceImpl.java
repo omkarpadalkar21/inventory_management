@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public User registerUser(RegisterRequestDto registerRequestDto) {
         // check if the user already exists
         if (userRepository.findByUsername(registerRequestDto.getUsername()).isPresent()) {
