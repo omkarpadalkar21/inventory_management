@@ -1,5 +1,8 @@
 package com.adv_java.inventory_management.controllers;
 
+import com.adv_java.inventory_management.domain.dtos.category.CategoryDto;
+import com.adv_java.inventory_management.domain.dtos.category.CreateCategoryDto;
+import com.adv_java.inventory_management.domain.dtos.category.UpdateCategoryDto;
 import com.adv_java.inventory_management.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

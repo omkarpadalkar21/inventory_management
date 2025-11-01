@@ -1,0 +1,131 @@
+package com.adv_java.inventory_management.mapper;
+
+import com.adv_java.inventory_management.domain.dtos.CreateProductDto;
+import com.adv_java.inventory_management.domain.dtos.ProductDto;
+import com.adv_java.inventory_management.domain.dtos.UpdateProductDto;
+import com.adv_java.inventory_management.domain.entities.Categories;
+import com.adv_java.inventory_management.domain.entities.Products;
+import com.adv_java.inventory_management.domain.entities.Supplier;
+import java.util.UUID;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2025-11-01T19:29:55+0530",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
+)
+@Component
+public class ProductMapperImpl implements ProductMapper {
+
+    @Override
+    public ProductDto toDto(Products product) {
+        if ( product == null ) {
+            return null;
+        }
+
+        ProductDto.ProductDtoBuilder productDto = ProductDto.builder();
+
+        productDto.categoryId( productCategoryId( product ) );
+        productDto.categoryName( productCategoryName( product ) );
+        productDto.supplierId( productSupplierId( product ) );
+        productDto.supplierName( productSupplierName( product ) );
+        productDto.id( product.getId() );
+        productDto.sku( product.getSku() );
+        productDto.name( product.getName() );
+        productDto.description( product.getDescription() );
+        productDto.unitPrice( product.getUnitPrice() );
+        productDto.costPrice( product.getCostPrice() );
+        productDto.quantityInStock( product.getQuantityInStock() );
+        productDto.reorderLevel( product.getReorderLevel() );
+        productDto.status( product.getStatus() );
+        productDto.createdAt( product.getCreatedAt() );
+        productDto.updatedAt( product.getUpdatedAt() );
+
+        return productDto.build();
+    }
+
+    @Override
+    public Products fromCreateDto(CreateProductDto dto) {
+        if ( dto == null ) {
+            return null;
+        }
+
+        Products.ProductsBuilder products = Products.builder();
+
+        products.sku( dto.getSku() );
+        products.name( dto.getName() );
+        products.description( dto.getDescription() );
+        products.unitPrice( dto.getUnitPrice() );
+        products.costPrice( dto.getCostPrice() );
+        products.quantityInStock( dto.getQuantityInStock() );
+        products.reorderLevel( dto.getReorderLevel() );
+        products.status( dto.getStatus() );
+
+        return products.build();
+    }
+
+    @Override
+    public void updateProductFromDto(UpdateProductDto dto, Products product) {
+        if ( dto == null ) {
+            return;
+        }
+
+        if ( dto.getSku() != null ) {
+            product.setSku( dto.getSku() );
+        }
+        if ( dto.getName() != null ) {
+            product.setName( dto.getName() );
+        }
+        if ( dto.getDescription() != null ) {
+            product.setDescription( dto.getDescription() );
+        }
+        if ( dto.getUnitPrice() != null ) {
+            product.setUnitPrice( dto.getUnitPrice() );
+        }
+        if ( dto.getCostPrice() != null ) {
+            product.setCostPrice( dto.getCostPrice() );
+        }
+        if ( dto.getQuantityInStock() != null ) {
+            product.setQuantityInStock( dto.getQuantityInStock() );
+        }
+        if ( dto.getReorderLevel() != null ) {
+            product.setReorderLevel( dto.getReorderLevel() );
+        }
+        if ( dto.getStatus() != null ) {
+            product.setStatus( dto.getStatus() );
+        }
+    }
+
+    private UUID productCategoryId(Products products) {
+        Categories category = products.getCategory();
+        if ( category == null ) {
+            return null;
+        }
+        return category.getId();
+    }
+
+    private String productCategoryName(Products products) {
+        Categories category = products.getCategory();
+        if ( category == null ) {
+            return null;
+        }
+        return category.getName();
+    }
+
+    private UUID productSupplierId(Products products) {
+        Supplier supplier = products.getSupplier();
+        if ( supplier == null ) {
+            return null;
+        }
+        return supplier.getId();
+    }
+
+    private String productSupplierName(Products products) {
+        Supplier supplier = products.getSupplier();
+        if ( supplier == null ) {
+            return null;
+        }
+        return supplier.getName();
+    }
+}
