@@ -1,5 +1,7 @@
 package com.adv_java.inventory_management.config;
 
+import com.adv_java.inventory_management.security.CustomAccessDeniedHandler;
+import com.adv_java.inventory_management.security.CustomAuthenticationEntryPoint;
 import com.adv_java.inventory_management.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +26,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthFilter jwtAuthFilter, CorsConfigurationSource corsConfigurationSource) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthFilter jwtAuthFilter, 
+                                                   CorsConfigurationSource corsConfigurationSource,
+                                                   CustomAccessDeniedHandler accessDeniedHandler,
+                                                   CustomAuthenticationEntryPoint authenticationEntryPoint) throws Exception {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
@@ -33,7 +38,12 @@ public class SecurityConfig {
                 ).csrf(AbstractHttpConfigurer::disable) // disables csrf token
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

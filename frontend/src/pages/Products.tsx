@@ -223,6 +223,7 @@ export default function Products() {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -239,10 +240,15 @@ export default function Products() {
   });
 
   useEffect(() => {
-    loadProducts();
+    if (!isSearching) {
+      loadProducts();
+    }
+  }, [page, isSearching]);
+
+  useEffect(() => {
     loadCategories();
     loadSuppliers();
-  }, [page]);
+  }, []);
 
   const loadProducts = async () => {
     try {
@@ -289,18 +295,26 @@ export default function Products() {
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
-      loadProducts();
+      setIsSearching(false);
+      setPage(0);
+      await loadProducts();
       return;
     }
     try {
+      setLoading(true);
+      setIsSearching(true);
       const data = await apiClient.searchProducts(searchTerm);
       setProducts(data);
+      setPage(0);
+      setTotalPages(1);
     } catch (error: any) {
       toast({
         title: "Search error",
         description: error.message,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -498,7 +512,7 @@ export default function Products() {
                   <div className="flex justify-between items-center mt-4">
                     <Button
                       onClick={() => setPage(Math.max(0, page - 1))}
-                      disabled={page === 0}
+                      disabled={page === 0 || isSearching}
                     >
                       Previous
                     </Button>
@@ -507,7 +521,7 @@ export default function Products() {
                     </span>
                     <Button
                       onClick={() => setPage(page + 1)}
-                      disabled={page + 1 >= totalPages}
+                      disabled={page + 1 >= totalPages || isSearching}
                     >
                       Next
                     </Button>
