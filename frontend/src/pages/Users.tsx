@@ -35,9 +35,9 @@ export default function Users() {
     try {
       setLoading(true);
       const response = await apiClient.getUsers();
-      setUsers(response.data || []);
-    } catch (error) {
-      toast.error('Failed to load users');
+      setUsers(response || []);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to load users');
     } finally {
       setLoading(false);
     }
@@ -47,11 +47,11 @@ export default function Users() {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      await apiClient.deleteUser(id);
-      toast.success('User deleted');
+      await apiClient.deleteUser(String(id));
+      toast.success('User deleted successfully');
       fetchUsers();
-    } catch (error) {
-      toast.error('Failed to delete user');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete user');
     }
   };
 
