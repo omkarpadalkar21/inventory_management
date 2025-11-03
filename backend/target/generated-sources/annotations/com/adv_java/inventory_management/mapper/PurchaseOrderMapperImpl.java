@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-01T22:48:27+0530",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Ubuntu)"
+    date = "2025-11-03T11:18:04+0530",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.44.0.v20251023-0518, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
@@ -31,13 +31,13 @@ public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
         purchaseOrderDto.supplierName( purchaseOrderSupplierName( purchaseOrder ) );
         purchaseOrderDto.createdById( purchaseOrderCreatedById( purchaseOrder ) );
         purchaseOrderDto.createdByUsername( purchaseOrderCreatedByUsername( purchaseOrder ) );
-        purchaseOrderDto.id( purchaseOrder.getId() );
-        purchaseOrderDto.orderNumber( purchaseOrder.getOrderNumber() );
-        purchaseOrderDto.orderDate( purchaseOrder.getOrderDate() );
+        purchaseOrderDto.createdAt( purchaseOrder.getCreatedAt() );
         purchaseOrderDto.expectedDeliveryDate( purchaseOrder.getExpectedDeliveryDate() );
+        purchaseOrderDto.id( purchaseOrder.getId() );
+        purchaseOrderDto.orderDate( purchaseOrder.getOrderDate() );
+        purchaseOrderDto.orderNumber( purchaseOrder.getOrderNumber() );
         purchaseOrderDto.status( purchaseOrder.getStatus() );
         purchaseOrderDto.totalAmount( purchaseOrder.getTotalAmount() );
-        purchaseOrderDto.createdAt( purchaseOrder.getCreatedAt() );
         purchaseOrderDto.updatedAt( purchaseOrder.getUpdatedAt() );
 
         return purchaseOrderDto.build();
@@ -55,8 +55,8 @@ public class PurchaseOrderMapperImpl implements PurchaseOrderMapper {
         purchaseOrderItemDto.productName( itemProductName( item ) );
         purchaseOrderItemDto.id( item.getId() );
         purchaseOrderItemDto.quantity( item.getQuantity() );
-        purchaseOrderItemDto.unitPrice( item.getUnitPrice() );
         purchaseOrderItemDto.subtotal( item.getSubtotal() );
+        purchaseOrderItemDto.unitPrice( item.getUnitPrice() );
 
         return purchaseOrderItemDto.build();
     }
