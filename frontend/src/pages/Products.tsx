@@ -34,6 +34,9 @@ import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
+const formatINR = (value: number | string) =>
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(value ?? 0));
+
 const ProductDialog = ({
   open,
   onOpenChange,
@@ -459,7 +462,7 @@ export default function Products() {
                           </TableCell>
                           <TableCell>{product.name}</TableCell>
                           <TableCell>{product.categoryName}</TableCell>
-                          <TableCell>${product.unitPrice}</TableCell>
+                          <TableCell>{formatINR(product.unitPrice)}</TableCell>
                           <TableCell>
                             {product.quantityInStock <= product.reorderLevel ? (
                               <Badge

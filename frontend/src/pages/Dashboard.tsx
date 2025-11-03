@@ -6,6 +6,9 @@ import { apiClient } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 
+const formatINR = (value: number | string) =>
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(value ?? 0));
+
 export default function Dashboard() {
   const [stats, setStats] = useState({
     totalProducts: 0,
@@ -70,7 +73,7 @@ export default function Dashboard() {
     },
     {
       title: 'Total Value',
-      value: `$${stats.totalValue.toLocaleString()}`,
+      value: formatINR(stats.totalValue),
       icon: DollarSign,
       color: 'text-success',
       bgColor: 'bg-success/10',

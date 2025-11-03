@@ -32,6 +32,9 @@ import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
+const formatINR = (value: number | string) =>
+  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(value ?? 0));
+
 const PurchaseOrderDialog = ({
   isAddDialogOpen,
   setIsAddDialogOpen,
@@ -131,7 +134,7 @@ const PurchaseOrderDialog = ({
                   <SelectContent>
                     {products.map((product: any) => (
                       <SelectItem key={product.id} value={product.id}>
-                        {product.name} - ${product.unitPrice}
+                        {product.name} - {formatINR(product.unitPrice)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -234,7 +237,7 @@ const ViewOrderDialog = ({
             <div>
               <Label>Total Amount</Label>
               <p className="text-sm font-bold">
-                ${selectedOrder.totalAmount}
+                {formatINR(selectedOrder.totalAmount)}
               </p>
             </div>
             <div>
@@ -259,8 +262,8 @@ const ViewOrderDialog = ({
                   <TableRow key={item.id}>
                     <TableCell>{item.productName}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
-                    <TableCell>${item.unitPrice}</TableCell>
-                    <TableCell>${item.subtotal}</TableCell>
+                    <TableCell>{formatINR(item.unitPrice)}</TableCell>
+                    <TableCell>{formatINR(item.subtotal)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -497,7 +500,7 @@ export default function PurchaseOrders() {
                         <TableCell>
                           {new Date(order.orderDate).toLocaleDateString()}
                         </TableCell>
-                        <TableCell>${order.totalAmount}</TableCell>
+                        <TableCell>{formatINR(order.totalAmount)}</TableCell>
                         <TableCell>
                           <Select
                             value={order.status}
